@@ -35,9 +35,9 @@ public class WebSecurityConfiguration {
                 new KeycloakJwtRolesConverter(kcClientId));
 
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/home/admin/**")
+                .requestMatchers("/api/v1/admin/**")
                 .hasRole("ADMIN_WRITE")
-                .requestMatchers("/home/public/**")
+                .requestMatchers("/api/v1/public/**")
                 .hasRole("USER_READ")
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated())

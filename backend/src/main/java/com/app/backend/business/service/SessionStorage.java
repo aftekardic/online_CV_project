@@ -10,10 +10,6 @@ public class SessionStorage {
     private final Map<String, Map<String, String>> storage = new ConcurrentHashMap<>();
 
     public void putCache(String cacheName, String key, String value, long ttl) {
-        System.out.println(cacheName);
-        System.out.println(key);
-        System.out.println(value);
-        System.out.println(ttl);
         Map<String, String> cache = storage.computeIfAbsent(cacheName, k -> new ConcurrentHashMap<>());
         cache.put(key, value);
     }

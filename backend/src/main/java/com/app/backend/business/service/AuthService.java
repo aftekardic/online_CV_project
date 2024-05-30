@@ -36,6 +36,12 @@ public class AuthService {
     @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/token")
     private String kcGetTokenUrl;
 
+    @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/logout")
+    private String kcLogoutUrl;
+
+    @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/revoke")
+    private String kcRevokeTokenUrl;
+
     private static final String GRANT_TYPE_PASSWORD = "password";
     private static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 
@@ -57,7 +63,7 @@ public class AuthService {
 
         return ResponseEntity.ok().body(AuthResponseDto.builder()
                 .status("SUCCESS")
-                .message("Login successfully...")
+                .message(tokenDto.getAccess_token())
                 .build());
     }
 
@@ -108,5 +114,43 @@ public class AuthService {
                 new HttpEntity<>(requestBody, headers), TokenDto.class);
 
         return response.getBody();
+    }
+
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletRequest servletRequest) {
+
+        String deviceId = servletRequest.getHeader(DEVICE_ID);
+        String refreshToken = (String) sessionStorage.getCache(REFRESH_TOKEN, deviceId);
+
+        if (refreshToken == null) {
+            return ResponseEntity.badRequest().body("Refresh-Token is missing or invalid");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("client_id", kcClientId);
+        requestBody.add("client_secret", kcClientSecret);
+        requestBody.add("refresh_token", refreshToken);
+
+        // Logout request to invalidate refresh token
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<String> logoutResponse = restTemplate.postForEntity(kcLogoutUrl, entity, String.class);
+
+        // Token revocation request to invalidate access token
+        requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("client_id", kcClientId);
+        requestBody.add("client_secret", kcClientSecret);
+        requestBody.add("token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> revokeEntity = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<String> revokeResponse = restTemplate.postForEntity(kcRevokeTokenUrl, revokeEntity,
+                String.class);
+        if (logoutResponse.getStatusCode().is2xxSuccessful() && revokeResponse.getStatusCode().is2xxSuccessful()) {
+            sessionStorage.removeCache(REFRESH_TOKEN, deviceId);
+            return ResponseEntity.ok().body("Logout successful");
+        } else {
+            return ResponseEntity.status(logoutResponse.getStatusCode()).body("Logout failed");
+        }
     }
 }

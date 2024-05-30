@@ -30,4 +30,9 @@ public class AuthController {
     public ResponseEntity<Object> refreshToken(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         return authService.refreshToken(servletRequest, servletResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletRequest servletRequest) {
+        return authService.logout(request, servletRequest);
+    }
 }
