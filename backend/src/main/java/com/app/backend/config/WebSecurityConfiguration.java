@@ -20,10 +20,10 @@ import com.app.backend.business.service.KeycloakJwtRolesConverter;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration {
-    @Value("auth-service-v1")
+    @Value("${keycloak.client-id}")
     private String kcClientId;
 
-    @Value("http://localhost:8080/realms/online-cv-project-realm")
+    @Value("${keycloak.token-issuer-url}")
     private String tokenIssuerUrl;
 
     @Bean

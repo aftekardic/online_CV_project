@@ -1,0 +1,34 @@
+{
+  "properties": [
+    {
+      "name": "keycloak.client-id",
+      "type": "java.lang.String",
+      "description": "Client ID specified in Keycloak'"
+    },
+    {
+      "name": "keycloak.client-secret",
+      "type": "java.lang.String",
+      "description": "Client Secret specified in keycloak'"
+    },
+    {
+      "name": "keycloak.token-url",
+      "type": "java.lang.String",
+      "description": "URL defined to obtain token from Keycloak'"
+    },
+    {
+      "name": "keycloak.logout-url",
+      "type": "java.lang.String",
+      "description": "URL defined to terminate session from Keycloak'"
+    },
+    {
+      "name": "keycloak.revoke-token-url",
+      "type": "java.lang.String",
+      "description": "URL defined to revoke token from Keycloak'"
+    },
+    {
+      "name": "keycloak.token-issuer-url",
+      "type": "java.lang.String",
+      "description": "Base realm url in Keycloak'"
+    }
+  ]
+}

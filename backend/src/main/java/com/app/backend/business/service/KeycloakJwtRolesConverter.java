@@ -20,7 +20,7 @@ public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<Gran
 
     private String kcClientId;
 
-    public KeycloakJwtRolesConverter(@Value("auth-service-v1") String kcClientId) {
+    public KeycloakJwtRolesConverter(@Value("${keycloak.client-id}") String kcClientId) {
         this.kcClientId = kcClientId;
     }
 

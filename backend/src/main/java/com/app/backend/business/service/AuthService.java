@@ -27,19 +27,19 @@ public class AuthService {
     @Autowired
     private SessionStorage sessionStorage;
 
-    @Value("auth-service-v1")
+    @Value("${keycloak.client-id}")
     private String kcClientId;
 
-    @Value("JXU1y3O21y3rZMZdkDQfgxDSDcs16UQb")
+    @Value("${keycloak.client-secret}")
     private String kcClientSecret;
 
-    @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/token")
+    @Value("${keycloak.token-url}")
     private String kcGetTokenUrl;
 
-    @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/logout")
+    @Value("${keycloak.logout-url}")
     private String kcLogoutUrl;
 
-    @Value("http://localhost:8080/realms/online-cv-project-realm/protocol/openid-connect/revoke")
+    @Value("${keycloak.revoke-token-url}")
     private String kcRevokeTokenUrl;
 
     private static final String GRANT_TYPE_PASSWORD = "password";
