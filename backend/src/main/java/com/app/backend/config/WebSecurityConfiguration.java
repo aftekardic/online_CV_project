@@ -9,7 +9,7 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.server.resource.authentication.DelegatingJwtGrantedAuthoritiesConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -34,24 +34,19 @@ public class WebSecurityConfiguration {
                 new JwtGrantedAuthoritiesConverter(),
                 new KeycloakJwtRolesConverter(kcClientId));
 
-        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/api/v1/admin/**")
-                .hasRole("ADMIN_WRITE")
-                .requestMatchers("/api/v1/public/**")
-                .hasRole("USER_READ")
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated())
-                .httpBasic()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(entryPoint)
-                .accessDeniedHandler(accessDenied)
-                .and()
-                .csrf().disable()
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(
-                        jwt -> new JwtAuthenticationToken(jwt, authoritiesConverter.convert(jwt)));
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN_WRITE")
+                        .requestMatchers("/api/v1/public/**").hasRole("USER_READ")
+                        .requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(accessDenied))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter(authoritiesConverter))));
+
         return http.build();
     }
 
@@ -64,4 +59,12 @@ public class WebSecurityConfiguration {
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("");
     }
+
+    private JwtAuthenticationConverter jwtAuthenticationConverter(
+            DelegatingJwtGrantedAuthoritiesConverter authoritiesConverter) {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return converter;
+    }
+
 }

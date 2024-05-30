@@ -25,7 +25,7 @@ public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<Gran
     }
 
     @Override
-    public Collection<GrantedAuthority> convert(Jwt jwt) {
+    public Collection<GrantedAuthority> convert(@SuppressWarnings("null") Jwt jwt) {
         Map<String, Collection<String>> realmAccess = jwt.getClaim(CLAIM_REALM_ACCESS);
 
         Map<String, Map<String, Collection<String>>> resourceAccess = jwt.getClaim(CLAIM_RESOURCE_ACCESS);
