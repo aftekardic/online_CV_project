@@ -133,11 +133,9 @@ public class AuthService {
         requestBody.add("client_secret", kcClientSecret);
         requestBody.add("refresh_token", refreshToken);
 
-        // Logout request to invalidate refresh token
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<String> logoutResponse = restTemplate.postForEntity(kcLogoutUrl, entity, String.class);
 
-        // Token revocation request to invalidate access token
         requestBody = new LinkedMultiValueMap<>();
         requestBody.add("client_id", kcClientId);
         requestBody.add("client_secret", kcClientSecret);
