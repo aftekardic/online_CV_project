@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppBar, Tabs, Tab, Toolbar, Typography, Box } from "@mui/material";
+import { AppBar, Tabs, Tab, Typography, Box } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AuthProvider } from "../services/AuthProvider";
 import LogoutIcon from "@mui/icons-material/Logout";
