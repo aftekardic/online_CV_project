@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }, 3000);
 
-    return () => clearTimeout(timer); // Clean up the timer on component unmount
+    return () => clearTimeout(timer);
   }, [isAuthenticated, navigate]);
 
   if (loading) {
