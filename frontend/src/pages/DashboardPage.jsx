@@ -1,16 +1,6 @@
 import React from "react";
 import UploadCV from "../components/UploadCV";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  Container,
-} from "@mui/material";
-import UpdateIcon from "@mui/icons-material/Update";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Card, CardContent, Typography, Container } from "@mui/material";
 
 function DashboardPage() {
   return (
