@@ -39,8 +39,7 @@ public class WebSecurityConfiguration {
 
                 http.csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN_WRITE")
-                                                .requestMatchers("/api/v1/public/**").hasRole("USER_READ")
+                                                .requestMatchers("/api/v1/cv/**").hasRole("USER_READ")
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .exceptionHandling(exceptionHandling -> exceptionHandling
