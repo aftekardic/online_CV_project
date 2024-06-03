@@ -17,7 +17,7 @@ public class CVEntity extends BaseEntity {
     @Lob
 
     @Column(nullable = false)
-    private byte[] fileData;
+    private String filePath;
 
     @Column(nullable = false)
     private String fileType;

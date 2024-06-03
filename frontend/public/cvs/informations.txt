@@ -1,0 +1,2 @@
+This folder is required. 
+When you upload a CV, it will copy your uploaded CV to this folder. 

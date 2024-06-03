@@ -34,7 +34,8 @@ function SignInPage() {
 
       const { data } = response;
       if (data.status === "SUCCESS") {
-        localStorage.setItem("accessToken", data.message);
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("userEmail", email);
 
         toast.success("Login successful!", {

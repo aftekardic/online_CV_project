@@ -63,7 +63,8 @@ public class AuthService {
 
         return ResponseEntity.ok().body(AuthResponseDto.builder()
                 .status("SUCCESS")
-                .message(tokenDto.getAccess_token())
+                .accessToken(tokenDto.getAccess_token())
+                .refreshToken(tokenDto.getRefresh_token())
                 .build());
     }
 
@@ -80,6 +81,8 @@ public class AuthService {
 
         return ResponseEntity.ok().body(AuthResponseDto.builder()
                 .status("SUCCESS")
+                .accessToken(tokenDto.getAccess_token())
+                .refreshToken(tokenDto.getRefresh_token())
                 .build());
     }
 
