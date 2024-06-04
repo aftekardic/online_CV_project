@@ -29,6 +29,11 @@
       "name": "keycloak.token-issuer-url",
       "type": "java.lang.String",
       "description": "Base realm url in Keycloak'"
+    },
+    {
+      "name": "keycloak.userinfo-url",
+      "type": "java.lang.String",
+      "description": "A description for 'keycloak.userinfo-url'"
     }
   ]
 }

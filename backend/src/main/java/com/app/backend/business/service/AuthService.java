@@ -96,6 +96,7 @@ public class AuthService {
         requestBody.add("client_secret", kcClientSecret);
         requestBody.add("username", request.getEmail());
         requestBody.add("password", request.getPassword());
+        requestBody.add("scope", "openid");
 
         ResponseEntity<TokenDto> response = restTemplate.postForEntity(kcGetTokenUrl,
                 new HttpEntity<>(requestBody, headers), TokenDto.class);
