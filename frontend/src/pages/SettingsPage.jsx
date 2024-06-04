@@ -11,13 +11,14 @@ import {
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import api from "../services/api";
+import { toast } from "react-toastify";
 
 function SettingsPage() {
   const [count, setCount] = useState(0);
   const [formData, setFormData] = useState({
     email: "",
-    firstName: "",
-    lastName: "",
+    given_name: "",
+    family_name: "",
     password: "",
   });
   const [changePw, setChangePw] = useState(false);
@@ -35,23 +36,37 @@ function SettingsPage() {
       setChangePw(true);
     } else {
       setChangePw(false);
+      setFormData((prevFormData) => {
+        const { password, ...updatedFormData } = prevFormData;
+        return updatedFormData;
+      });
     }
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Güncelleme işlemleri burada yapılabilir
-    console.log("Updated information:", formData);
+    const toastId = toast("Updating...", { autoClose: false });
+
+    const response = await api.put("/api/v1/user/update", formData);
+    toast.update(toastId, {
+      autoClose: 1000,
+      type: response.status === 200 ? "success" : "error",
+      render: response.data,
+    });
   };
+
   useEffect(() => {
     const getUserInfo = async () => {
       const response = await api.get("/api/v1/user/info");
 
       const { data } = response;
+
       if (data.status == "SUCCESS") {
         setFormData({
+          sub: data.sub,
           email: data.email,
-          firstName: data.given_name,
-          lastName: data.family_name,
+          given_name: data.given_name,
+          family_name: data.family_name,
         });
       }
     };
@@ -89,11 +104,11 @@ function SettingsPage() {
               <TextField
                 required
                 fullWidth
-                id="firstName"
+                id="given_name"
                 label="First Name"
-                name="firstName"
+                name="given_name"
                 autoComplete="given-name"
-                value={formData.firstName}
+                value={formData.given_name}
                 onChange={handleChange}
               />
             </Grid>
@@ -101,11 +116,11 @@ function SettingsPage() {
               <TextField
                 required
                 fullWidth
-                id="lastName"
+                id="family_name"
                 label="Last Name"
-                name="lastName"
+                name="family_name"
                 autoComplete="family-name"
-                value={formData.lastName}
+                value={formData.family_name}
                 onChange={handleChange}
               />
             </Grid>
