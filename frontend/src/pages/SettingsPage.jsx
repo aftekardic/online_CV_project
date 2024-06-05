@@ -32,7 +32,7 @@ function SettingsPage() {
 
   const handleChangeStatusOfChangePw = (e) => {
     setCount(count + 1);
-    if (count % 2 == 0) {
+    if (count % 2 === 0) {
       setChangePw(true);
     } else {
       setChangePw(false);
@@ -46,13 +46,21 @@ function SettingsPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const toastId = toast("Updating...", { autoClose: false });
+    try {
+      const response = await api.put("/api/v1/user/update", formData);
 
-    const response = await api.put("/api/v1/user/update", formData);
-    toast.update(toastId, {
-      autoClose: 1000,
-      type: response.status === 200 ? "success" : "error",
-      render: response.data,
-    });
+      toast.update(toastId, {
+        autoClose: 1000,
+        type: response.status === 200 ? "success" : "error",
+        render: response.data,
+      });
+    } catch (error) {
+      toast.update(toastId, {
+        autoClose: 1000,
+        type: "error",
+        render: error.response.data,
+      });
+    }
   };
 
   useEffect(() => {
@@ -61,7 +69,7 @@ function SettingsPage() {
 
       const { data } = response;
 
-      if (data.status == "SUCCESS") {
+      if (data.status === "SUCCESS") {
         setFormData({
           sub: data.sub,
           email: data.email,

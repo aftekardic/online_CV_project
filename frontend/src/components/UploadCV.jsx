@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import api from "../services/api";
 import { toast } from "react-toastify";
@@ -79,7 +73,7 @@ function UploadCV() {
   return (
     <Box sx={{ p: 4, display: "flex", flexDirection: "column" }}>
       <Button component="label" sx={{ width: "50%" }}>
-        {name?.length > 0 && name != undefined ? name : "Upload File"}
+        {name?.length > 0 && name !== undefined ? name : "Upload File"}
         <input onChange={handleFileChange} type="file" hidden />
       </Button>
       <Button
