@@ -25,6 +25,8 @@ const renewToken = async () => {
     console.error("Token renewal failed", error);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userRoles");
+    localStorage.removeItem("userEmail");
     window.location.href = "/sign-in";
   }
 };

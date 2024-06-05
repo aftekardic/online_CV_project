@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -7,17 +7,27 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import api from "../services/api";
 
 function SignUpPage() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await api.post("/auth/sign-up", formData);
   };
   return (
     <Box
@@ -44,6 +54,7 @@ function SignUpPage() {
               fullWidth
               id="firstName"
               label="First Name"
+              onChange={handleChange}
               autoFocus
             />
           </Grid>
@@ -55,6 +66,7 @@ function SignUpPage() {
               label="Last Name"
               name="lastName"
               autoComplete="family-name"
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -65,6 +77,7 @@ function SignUpPage() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -76,6 +89,7 @@ function SignUpPage() {
               type="password"
               id="password"
               autoComplete="new-password"
+              onChange={handleChange}
             />
           </Grid>
         </Grid>

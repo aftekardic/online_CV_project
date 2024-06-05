@@ -22,6 +22,8 @@ function Layout() {
       });
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userRoles");
+      localStorage.removeItem("userEmail");
       toast.success("You are redirecting to sign page.", {
         onClose: () => {
           navigate("/");

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.backend.business.dto.LoginRequestDto;
+import com.app.backend.business.dto.RegisterRequestDto;
 import com.app.backend.business.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,12 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestBody LoginRequestDto request, HttpServletRequest servletRequest,
             HttpServletResponse servletResponse) {
         return authService.login(request, servletRequest, servletResponse);
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<Object> register(@RequestBody RegisterRequestDto request, HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse) {
+        return authService.register(request, servletRequest, servletResponse);
     }
 
     @PostMapping(value = "/refresh-token")

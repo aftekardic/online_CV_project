@@ -1,5 +1,7 @@
 package com.app.backend.business.service;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.app.backend.business.dto.FormUserDto;
 import com.app.backend.business.dto.UserDto;
+import com.app.backend.data.entity.CVEntity;
+import com.app.backend.data.repository.CVRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -26,6 +30,9 @@ public class KeycloakUserService {
 
         @Autowired
         private RestTemplate restTemplate;
+
+        @Autowired
+        private CVRepository cvRepository;
 
         private static final String AUTHORIZATION = "Authorization";
 
@@ -74,12 +81,37 @@ public class KeycloakUserService {
                                                         headers),
                                         Object.class);
 
+                        String fileName = "cv_" + formUserDto.getEmail()
+                                        + System.currentTimeMillis() + ".pdf";
+                        CVEntity cv = cvRepository.findByUserEmail(formUserDto.getOld_email());
+                        cv.setUserEmail(formUserDto.getEmail());
+                        cv.setFilePath("\\cvs\\" + fileName);
+                        cvRepository.save(cv);
+
+                        String currentPath = new java.io.File(".").getCanonicalPath();
+                        String filesPath = currentPath + "\\frontend\\public\\cvs\\";
+
+                        File folder = new File(filesPath);
+                        File[] listOfFiles = folder.listFiles(
+                                        (dir, name) -> name.toLowerCase().contains(formUserDto.getOld_email()));
+
+                        if (listOfFiles != null) {
+                                for (File file : listOfFiles) {
+                                        if (file.isFile()) {
+
+                                                File newFile = new File(file.getParent(), fileName);
+                                                file.renameTo(newFile);
+                                        }
+                                }
+                        }
+
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                         .body("There is an error when updating...");
                 }
 
-                return ResponseEntity.status(HttpStatus.OK).body("User updates successfully...");
+                return ResponseEntity.status(HttpStatus.OK)
+                                .body("User updates successfully... Redirecting to sign page...");
         }
 
 }

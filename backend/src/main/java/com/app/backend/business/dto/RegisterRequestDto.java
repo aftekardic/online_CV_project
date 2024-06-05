@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormUserDto {
-    private String sub;
-    private String given_name;
-    private String family_name;
+public class RegisterRequestDto {
     private String email;
     private String password;
-    private String old_email;
+    private String firstName;
+    private String lastName;
 }

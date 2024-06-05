@@ -21,7 +21,6 @@ function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [cvFiles, setCvFiles] = useState([]);
   useEffect(() => {
-    // CV dosyalarını backend'den çekme
     const fetchCVs = async () => {
       try {
         const response = await api.get("/api/v1/cv/list");
@@ -54,7 +53,7 @@ function DashboardPage() {
             <UploadCV />
           </CardContent>
         </Card>
-      ) : (
+      ) : localStorage.getItem("userRoles").includes("USER") ? (
         <Card>
           <CardContent>
             <Typography variant="h6" component="div" sx={{ mb: 2 }}>
@@ -104,6 +103,8 @@ function DashboardPage() {
             </List>
           </CardContent>
         </Card>
+      ) : (
+        <Typography>Please contact to admin for permission...</Typography>
       )}
     </Container>
   );

@@ -69,7 +69,6 @@ function UploadCV() {
   useEffect(() => {
     getCV();
   }, [userEmail]);
-
   return (
     <Box sx={{ p: 4, display: "flex", flexDirection: "column" }}>
       <Button component="label" sx={{ width: "50%" }}>
