@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-toastify";
+import { getUserRoles, parseJwt } from "../services/JwtParser";
 
 function SignInPage() {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ function SignInPage() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("userEmail", email);
+        localStorage.setItem(
+          "userRoles",
+          getUserRoles(parseJwt(data.accessToken))
+        );
 
         toast.success("Login successful!", {
           onClose: () => {

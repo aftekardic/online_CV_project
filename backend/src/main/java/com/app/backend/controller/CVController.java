@@ -1,8 +1,11 @@
 package com.app.backend.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +92,26 @@ public class CVController {
         } else {
             return ResponseEntity.status(404).body("CV not found for user email: " + userEmail);
         }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<String>> listCVs() throws IOException {
+        String currentPath = new java.io.File(".").getCanonicalPath();
+        String filesPath = currentPath + "\\frontend\\public\\cvs\\";
+
+        File folder = new File(filesPath);
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
+
+        List<String> fileNames = new ArrayList<>();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    fileNames.add(file.getName());
+                }
+            }
+        }
+
+        return ResponseEntity.ok(fileNames);
     }
 
 }
