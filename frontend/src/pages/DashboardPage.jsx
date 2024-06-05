@@ -53,7 +53,7 @@ function DashboardPage() {
             <UploadCV />
           </CardContent>
         </Card>
-      ) : localStorage.getItem("userRoles").includes("USER") ? (
+      ) : localStorage.getItem("userRoles").includes("ADMIN") ? (
         <Card>
           <CardContent>
             <Typography variant="h6" component="div" sx={{ mb: 2 }}>
