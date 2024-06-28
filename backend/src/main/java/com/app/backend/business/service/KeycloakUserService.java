@@ -85,11 +85,11 @@ public class KeycloakUserService {
                                         + System.currentTimeMillis() + ".pdf";
                         CVEntity cv = cvRepository.findByUserEmail(formUserDto.getOld_email());
                         cv.setUserEmail(formUserDto.getEmail());
-                        cv.setFilePath("\\cvs\\" + fileName);
+                        cv.setFilePath("/cvs/" + fileName);
                         cvRepository.save(cv);
 
                         String currentPath = new java.io.File(".").getCanonicalPath();
-                        String filesPath = currentPath + "\\frontend\\public\\cvs\\";
+                        String filesPath = currentPath + "/frontend/public/cvs/";
 
                         File folder = new File(filesPath);
                         File[] listOfFiles = folder.listFiles(

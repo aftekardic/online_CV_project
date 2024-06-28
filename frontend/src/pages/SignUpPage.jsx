@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import api from "../services/api";
+import { toast } from "react-toastify";
 
 function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -27,8 +28,30 @@ function SignUpPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await api.post("/auth/sign-up", formData);
+
+    try {
+      const resp = await api.post("/auth/sign-up", formData);
+
+      if (resp.status === 200) {
+        toast.done(resp.data, { autoClose: 1500 });
+      } else {
+        toast.error("An error occurred : ", resp.data, {
+          autoClose: 1500,
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 409) {
+          toast.error(error.response.data, { autoClose: 1500 });
+        } else {
+          toast.error(error.response.data, { autoClose: 1500 });
+        }
+      } else {
+        toast.error("An error occurred ", error.message, { autoClose: 1500 });
+      }
+    }
   };
+
   return (
     <Box
       sx={{

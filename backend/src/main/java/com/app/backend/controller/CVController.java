@@ -42,10 +42,10 @@ public class CVController {
 
                 String currentPath = new java.io.File(".").getCanonicalPath();
                 String fileName = "cv_" + cvDto.getUserEmail() + System.currentTimeMillis() + ".pdf";
-                String filePath = currentPath + "\\frontend\\public\\cvs\\" + fileName;
+                String filePath = currentPath + "/frontend/public/cvs/" + fileName;
                 Files.write(Paths.get(filePath), cvDto.getFile().getBytes());
 
-                cv.setFilePath("\\cvs\\" + fileName);
+                cv.setFilePath("/cvs/" + fileName);
 
                 cv.setFileType(cvDto.getFile().getContentType());
                 cv.setUserEmail(cvDto.getUserEmail());
@@ -60,16 +60,16 @@ public class CVController {
             try {
                 String currentPath = new java.io.File(".").getCanonicalPath();
 
-                Files.delete(Paths.get(currentPath + "\\frontend\\public\\" + currentCV.getFilePath()));
+                Files.delete(Paths.get(currentPath + "/frontend/public/" + currentCV.getFilePath()));
 
                 currentCV.setName(cvDto.getName());
 
                 String fileName = "cv_" + cvDto.getUserEmail() + System.currentTimeMillis() + ".pdf";
-                String filePath = currentPath + "\\frontend\\public\\cvs\\" + fileName;
+                String filePath = currentPath + "/frontend/public/cvs/" + fileName;
 
                 Files.write(Paths.get(filePath), cvDto.getFile().getBytes());
 
-                currentCV.setFilePath("\\cvs\\" + fileName);
+                currentCV.setFilePath("/cvs/" + fileName);
 
                 currentCV.setFileType(cvDto.getFile().getContentType());
                 currentCV.setUserEmail(cvDto.getUserEmail());
@@ -97,7 +97,7 @@ public class CVController {
     @GetMapping("/list")
     public ResponseEntity<List<String>> listCVs() throws IOException {
         String currentPath = new java.io.File(".").getCanonicalPath();
-        String filesPath = currentPath + "\\frontend\\public\\cvs\\";
+        String filesPath = currentPath + "/frontend/public/cvs/";
 
         File folder = new File(filesPath);
         File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));

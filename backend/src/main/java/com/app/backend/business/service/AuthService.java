@@ -94,29 +94,33 @@ public class AuthService {
                 "{\"firstName\":\"%s\",\"lastName\":\"%s\",\"email\":\"%s\",\"enabled\":true,\"realmRoles\":[\"USER\"]}",
                 request.getFirstName(), request.getLastName(),
                 request.getEmail());
-
-        ResponseEntity<Object> response = restTemplate.exchange(
-                kcUpdateUrl,
-                HttpMethod.POST,
-                new HttpEntity<>(dynamicJsonForUserInfo,
-                        headers),
-                Object.class);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            String newUserID = getUserSub(request.getEmail(), headers);
-            String dynamicJsonForPassword = String.format(
-                    "{\"type\":\"password\",\"temporary\":false,\"value\":\"%s\"}",
-                    request.getPassword());
-
-            restTemplate.exchange(
-                    kcUpdateUrl + "/" + newUserID + "/reset-password",
-                    HttpMethod.PUT,
-                    new HttpEntity<>(dynamicJsonForPassword,
+        try {
+            ResponseEntity<Object> response = restTemplate.exchange(
+                    kcUpdateUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(dynamicJsonForUserInfo,
                             headers),
                     Object.class);
-        } else {
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String newUserID = getUserSub(request.getEmail(), headers);
+                String dynamicJsonForPassword = String.format(
+                        "{\"type\":\"password\",\"temporary\":false,\"value\":\"%s\"}",
+                        request.getPassword());
+
+                restTemplate.exchange(
+                        kcUpdateUrl + "/" + newUserID + "/reset-password",
+                        HttpMethod.PUT,
+                        new HttpEntity<>(dynamicJsonForPassword,
+                                headers),
+                        Object.class);
+            }
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
         }
+
+        // else {
+        //
+        // }
 
         return ResponseEntity.ok().body("User created...");
     }

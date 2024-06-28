@@ -56,6 +56,7 @@ function UploadCV() {
 
       getCV();
     } catch (error) {
+      console.log(error);
       toast.update(toastId, {
         render: "Error uploading file",
         type: "error",
