@@ -10,8 +10,6 @@ import {
   ListItem,
   ListItemText,
   Link,
-  IconButton,
-  Divider,
   Box,
 } from "@mui/material";
 import { Search, PictureAsPdf } from "@mui/icons-material";

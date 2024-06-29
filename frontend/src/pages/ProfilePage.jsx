@@ -10,17 +10,6 @@ import {
   Paper,
 } from "@mui/material";
 import api from "../services/api";
-const createData = (
-  firstName,
-  lastName,
-  email,
-  birthDate,
-  salary,
-  uploadDate,
-  cvPath
-) => {
-  return { firstName, lastName, email, birthDate, salary, uploadDate, cvPath };
-};
 
 function ProfilePage() {
   const [formData, setFormData] = useState([]);
