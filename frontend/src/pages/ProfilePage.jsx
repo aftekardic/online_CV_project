@@ -1,5 +1,5 @@
-import { Box, Container } from "@mui/material";
-import React from "react";
+import { Box, Container, Link } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import api from "../services/api";
 const createData = (
   firstName,
   lastName,
@@ -21,38 +22,22 @@ const createData = (
   return { firstName, lastName, email, birthDate, salary, uploadDate, cvPath };
 };
 
-const rows = [
-  createData(
-    "Ahmet",
-    "Yılmaz",
-    "ahmet@example.com",
-    "1990-01-01",
-    5000,
-    "2023-06-01",
-    "/path/to/cv1.pdf"
-  ),
-  createData(
-    "Ayşe",
-    "Kaya",
-    "ayse@example.com",
-    "1985-05-15",
-    6000,
-    "2023-06-02",
-    "/path/to/cv2.pdf"
-  ),
-  createData(
-    "Mehmet",
-    "Demir",
-    "mehmet@example.com",
-    "1980-08-20",
-    7000,
-    "2023-06-03",
-    "/path/to/cv3.pdf"
-  ),
-  // Daha fazla veri ekleyebilirsiniz
-];
-
 function ProfilePage() {
+  const [formData, setFormData] = useState([]);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const response = await api.get("/api/v1/user/all");
+      const { data } = response;
+      setFormData(data);
+    };
+    if (
+      localStorage.getItem("userRoles").includes("ADMIN") ||
+      localStorage.getItem("userRoles").includes("USER")
+    ) {
+      getUserInfo();
+    }
+  }, []);
+
   return (
     <Container sx={{ mt: 4 }}>
       {localStorage.getItem("userRoles").includes("ADMIN") ? (
@@ -70,15 +55,28 @@ function ProfilePage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {formData.map((row) => (
                 <TableRow key={row.email}>
                   <TableCell>{row.firstName}</TableCell>
                   <TableCell>{row.lastName}</TableCell>
                   <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.birthDate}</TableCell>
+                  <TableCell>{row.birthday}</TableCell>
                   <TableCell>{row.salary}</TableCell>
+
                   <TableCell>{row.uploadDate}</TableCell>
-                  <TableCell>{row.cvPath}</TableCell>
+                  <TableCell>
+                    {row.cvPath != null ? (
+                      <Link
+                        href={`${row.cvPath}`}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        View CV
+                      </Link>
+                    ) : (
+                      <div>There is no CV</div>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

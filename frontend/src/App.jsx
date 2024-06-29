@@ -24,7 +24,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profiles" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

@@ -1,5 +1,8 @@
 package com.app.backend.business.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.app.backend.business.dto.DBUserDto;
@@ -35,4 +38,25 @@ public class CommonService {
                 .salary(userEntity.getSalary())
                 .build();
     }
+
+    public List<UserEntity> dbUserDtosToEntities(List<DBUserDto> dbRequestDtos) {
+        if (dbRequestDtos == null) {
+            return null;
+        }
+
+        return dbRequestDtos.stream()
+                .map(this::dbUserDtoToEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<DBUserDto> entitiesToDBUserDtos(List<UserEntity> userEntities) {
+        if (userEntities == null) {
+            return null;
+        }
+
+        return userEntities.stream()
+                .map(this::entityToDBUserDto)
+                .collect(Collectors.toList());
+    }
+
 }

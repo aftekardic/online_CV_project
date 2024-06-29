@@ -1,6 +1,9 @@
 package com.app.backend.business.service;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +34,9 @@ public class KeycloakUserService {
         @Value("${keycloak.update-url}")
         private String kcUpdateUrl;
 
+        @Value("${keycloak.all-users-url}")
+        private String kcAllUsersUrl;
+
         @Autowired
         private RestTemplate restTemplate;
 
@@ -55,6 +61,63 @@ public class KeycloakUserService {
                                 new HttpEntity<>(headers), UserDto.class);
 
                 return response.getBody();
+        }
+
+        @SuppressWarnings("unchecked")
+        public Object getAllUsers(HttpServletRequest servletRequest) {
+
+                String authorization = servletRequest.getHeader(AUTHORIZATION);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                headers.set(AUTHORIZATION, authorization);
+                ResponseEntity<Object> allusersResponse = restTemplate.exchange(
+                                kcAllUsersUrl,
+                                HttpMethod.GET,
+                                new HttpEntity<>(null, headers),
+                                Object.class);
+                ArrayList<Object> responseBody = (ArrayList<Object>) allusersResponse.getBody();
+
+                List<Object> resultUsers = new ArrayList<>();
+
+                if (responseBody == null || responseBody.isEmpty()) {
+                        return resultUsers;
+                }
+
+                for (Object user : responseBody) {
+                        if (user instanceof Map) {
+                                Map<String, Object> userData = (Map<String, Object>) user;
+                                String email = (String) userData.get("email");
+
+                                UserEntity userEntity = userRepository.findByEmail(email);
+                                CVEntity cvEntity = cvRepository.findByUserEmail(email);
+
+                                if (userEntity != null) {
+
+                                        userData.put("birthday", userEntity.getBirthday());
+                                        userData.put("salary", userEntity.getSalary());
+
+                                        if (cvEntity != null) {
+                                                userData.put("uploadDate",
+                                                                cvEntity.getUpdatedBy() != null
+                                                                                ? cvEntity.getUpdatedBy()
+                                                                                : cvEntity.getCreatedDate());
+                                                userData.put("cvPath", cvEntity.getFilePath());
+                                        } else {
+                                                userData.put("uploadDate", null);
+                                                userData.put("cvPath", null);
+                                        }
+
+                                } else {
+                                        userData.put("birthday", null);
+                                        userData.put("salary", null);
+
+                                }
+
+                                resultUsers.add(userData);
+                        }
+                }
+
+                return resultUsers;
         }
 
         public DBUserDto getDBUserInformationsByEmail(String email) {

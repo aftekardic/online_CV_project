@@ -60,6 +60,15 @@ function Layout() {
               navigate("/dashboard");
             }}
           />
+          {localStorage.getItem("userRoles").includes("ADMIN") && (
+            <Tab
+              label="Profiles"
+              onClick={() => {
+                navigate("/profiles");
+              }}
+            />
+          )}
+
           <Tab
             label="Settings"
             onClick={() => {

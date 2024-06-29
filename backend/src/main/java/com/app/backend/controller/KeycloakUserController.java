@@ -27,6 +27,7 @@ public class KeycloakUserController {
     public ResponseEntity<?> getUserInformationsByEmail(HttpServletRequest servletRequest) {
 
         UserDto user = keycloakUserService.getUserInformationsByEmail(servletRequest);
+
         DBUserDto dbUserDto = keycloakUserService.getDBUserInformationsByEmail(user.getEmail());
 
         return ResponseEntity.ok().body(UserDto.builder()
@@ -43,9 +44,16 @@ public class KeycloakUserController {
                 .build());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers(HttpServletRequest servletRequest) {
+        Object userDtos = keycloakUserService.getAllUsers(servletRequest);
+        return ResponseEntity.ok(userDtos);
+    }
+
     @PutMapping("/update")
     public ResponseEntity<?> updateUserInformations(@RequestBody FormUserDto formUserDto,
             HttpServletRequest servletRequest) {
         return keycloakUserService.updateUserInformations(formUserDto, servletRequest);
     }
+
 }

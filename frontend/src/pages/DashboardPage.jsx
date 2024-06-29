@@ -85,22 +85,13 @@ function DashboardPage() {
                       <ListItemText
                         primary={cv}
                         secondary={
-                          <Box sx={{ display: "flex", gap: 4 }}>
-                            <Link
-                              href={`/cvs/${cv}`}
-                              target="_blank"
-                              rel="noopener"
-                            >
-                              View PDF
-                            </Link>
-                            <Link
-                              href={`profile`}
-                              target="_blank"
-                              rel="noopener"
-                            >
-                              View Profile
-                            </Link>
-                          </Box>
+                          <Link
+                            href={`/cvs/${cv}`}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            View PDF
+                          </Link>
                         }
                       />
                     </ListItem>
