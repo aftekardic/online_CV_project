@@ -1,8 +1,9 @@
 package com.app.backend.data.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,19 +11,21 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Table(name = "cvs")
-public class CVEntity extends BaseEntity {
-    @Column(nullable = false)
-    private String name;
-
-    @Lob
-    @Column(nullable = false)
-    private String filePath;
+@Table(name = "users")
+public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
-    private String fileType;
+    String firstName;
 
     @Column(nullable = false)
-    private String userEmail;
+    String lastName;
 
+    @Column(nullable = false)
+    String email;
+
+    @Column(nullable = false)
+    Date birthday;
+
+    @Column(nullable = false)
+    double salary;
 }

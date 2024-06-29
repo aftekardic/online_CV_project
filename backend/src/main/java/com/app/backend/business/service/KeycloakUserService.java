@@ -13,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.app.backend.business.dto.DBUserDto;
 import com.app.backend.business.dto.FormUserDto;
 import com.app.backend.business.dto.UserDto;
 import com.app.backend.data.entity.CVEntity;
+import com.app.backend.data.entity.UserEntity;
 import com.app.backend.data.repository.CVRepository;
+import com.app.backend.data.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -34,6 +37,12 @@ public class KeycloakUserService {
         @Autowired
         private CVRepository cvRepository;
 
+        @Autowired
+        UserRepository userRepository;
+
+        @Autowired
+        CommonService commonService;
+
         private static final String AUTHORIZATION = "Authorization";
 
         public UserDto getUserInformationsByEmail(HttpServletRequest servletRequest) {
@@ -44,7 +53,12 @@ public class KeycloakUserService {
 
                 ResponseEntity<UserDto> response = restTemplate.postForEntity(kcGetUserinfoUrl,
                                 new HttpEntity<>(headers), UserDto.class);
+
                 return response.getBody();
+        }
+
+        public DBUserDto getDBUserInformationsByEmail(String email) {
+                return commonService.entityToDBUserDto(userRepository.findByEmail(email));
         }
 
         public ResponseEntity<?> updateUserInformations(FormUserDto formUserDto,
@@ -103,6 +117,24 @@ public class KeycloakUserService {
                                                 file.renameTo(newFile);
                                         }
                                 }
+                        }
+                        UserEntity existingUser = userRepository.findByEmail(formUserDto.getOld_email());
+
+                        if (existingUser != null) {
+                                DBUserDto dbUserDto = commonService.entityToDBUserDto(existingUser);
+                                dbUserDto.setEmail(formUserDto.getEmail());
+                                dbUserDto.setFirstName(formUserDto.getGiven_name());
+                                dbUserDto.setLastName(formUserDto.getFamily_name());
+                                dbUserDto.setBirthday(formUserDto.getBirthday());
+                                dbUserDto.setSalary(formUserDto.getSalary());
+
+                                UserEntity updatedUserEntity = commonService.dbUserDtoToEntity(dbUserDto);
+                                updatedUserEntity.setId(existingUser.getId());
+
+                                userRepository.save(updatedUserEntity);
+                        } else {
+                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                                .body("There is an error when updating on DB... Contact to Admin");
                         }
 
                 } catch (Exception e) {

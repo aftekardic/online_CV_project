@@ -20,9 +20,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.app.backend.business.dto.AuthResponseDto;
+import com.app.backend.business.dto.DBUserDto;
 import com.app.backend.business.dto.LoginRequestDto;
 import com.app.backend.business.dto.RegisterRequestDto;
 import com.app.backend.business.dto.TokenDto;
+import com.app.backend.data.entity.UserEntity;
+import com.app.backend.data.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +41,12 @@ public class AuthService {
 
     @Autowired
     private SessionStorage sessionStorage;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    CommonService commonService;
 
     @Value("${keycloak.client-id}")
     private String kcClientId;
@@ -114,13 +123,19 @@ public class AuthService {
                                 headers),
                         Object.class);
             }
+
+            if (userRepository.findByEmail(request.getEmail()) != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
+            } else {
+                DBUserDto newDbUserDto = new DBUserDto(request.getEmail(), request.getFirstName(),
+                        request.getLastName(), request.getBirthday(), request.getSalary());
+                UserEntity registeredUserEntity = commonService.dbUserDtoToEntity(newDbUserDto);
+                userRepository.save(registeredUserEntity);
+            }
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
         }
-
-        // else {
-        //
-        // }
 
         return ResponseEntity.ok().body("User created...");
     }
@@ -277,4 +292,5 @@ public class AuthService {
             return null;
         }
     }
+
 }

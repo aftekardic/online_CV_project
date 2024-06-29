@@ -1,5 +1,7 @@
 package com.app.backend.business.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,6 @@ public class RegisterRequestDto {
     private String password;
     private String firstName;
     private String lastName;
+    private Date birthday;
+    private double salary;
 }

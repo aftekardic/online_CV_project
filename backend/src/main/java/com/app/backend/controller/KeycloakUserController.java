@@ -3,6 +3,7 @@ package com.app.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.backend.business.dto.DBUserDto;
 import com.app.backend.business.dto.FormUserDto;
 import com.app.backend.business.dto.UserDto;
 import com.app.backend.business.service.KeycloakUserService;
@@ -24,7 +25,10 @@ public class KeycloakUserController {
 
     @GetMapping("/info")
     public ResponseEntity<?> getUserInformationsByEmail(HttpServletRequest servletRequest) {
+
         UserDto user = keycloakUserService.getUserInformationsByEmail(servletRequest);
+        DBUserDto dbUserDto = keycloakUserService.getDBUserInformationsByEmail(user.getEmail());
+
         return ResponseEntity.ok().body(UserDto.builder()
                 .status("SUCCESS")
                 .sub(user.getSub())
@@ -34,6 +38,8 @@ public class KeycloakUserController {
                 .given_name(user.getGiven_name())
                 .family_name(user.getFamily_name())
                 .email(user.getEmail())
+                .birthday(dbUserDto.getBirthday())
+                .salary(dbUserDto.getSalary())
                 .build());
     }
 

@@ -11,16 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private String status;
-    private String sub;
-    private String email_verified;
-    private String name;
-    private String preferred_username;
-    private String given_name;
-    private String family_name;
+public class DBUserDto {
     private String email;
-    private String password;
+    private String firstName;
+    private String lastName;
     private Date birthday;
     private double salary;
 }

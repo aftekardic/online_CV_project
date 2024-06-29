@@ -7,6 +7,7 @@ import { checkTokenValidity } from "./services/authService";
 import { useEffect } from "react";
 import Layout from "./components/Layout";
 import SettingsPage from "./pages/SettingsPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   useEffect(() => {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

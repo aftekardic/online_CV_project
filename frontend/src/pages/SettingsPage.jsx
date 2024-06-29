@@ -13,6 +13,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import api from "../services/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 function SettingsPage() {
   const navigate = useNavigate();
@@ -23,13 +27,24 @@ function SettingsPage() {
     family_name: "",
     password: "",
     old_email: "",
+    birthday: null,
+    salary: "",
   });
   const [changePw, setChangePw] = useState(false);
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    value = name === "salary" ? parseFloat(value) : value;
+
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleDateChanged = (date) => {
+    setFormData({
+      ...formData,
+      birthday: dayjs(date).toDate(),
     });
   };
 
@@ -81,7 +96,6 @@ function SettingsPage() {
       const response = await api.get("/api/v1/user/info");
 
       const { data } = response;
-
       if (data.status === "SUCCESS") {
         setFormData({
           sub: data.sub,
@@ -89,6 +103,8 @@ function SettingsPage() {
           given_name: data.given_name,
           family_name: data.family_name,
           old_email: data.email,
+          birthday: data.birthday,
+          salary: data.salary,
         });
       }
     };
@@ -172,6 +188,31 @@ function SettingsPage() {
                 >
                   {changePw ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}
                 </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Birthday"
+                    sx={{ width: "100%" }}
+                    value={dayjs(formData.birthday)}
+                    onChange={handleDateChanged}
+                    format="DD/MM/YYYY"
+                    required
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="salary"
+                  required
+                  fullWidth
+                  id="salary"
+                  label="Current Salary"
+                  value={formData.salary}
+                  onChange={handleChange}
+                  type="number"
+                />
               </Grid>
             </Grid>
             <Button

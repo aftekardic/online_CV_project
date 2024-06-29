@@ -1,5 +1,7 @@
 package com.app.backend.business.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +18,6 @@ public class FormUserDto {
     private String email;
     private String password;
     private String old_email;
+    private Date birthday;
+    private double salary;
 }

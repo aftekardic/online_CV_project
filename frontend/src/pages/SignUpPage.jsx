@@ -9,17 +9,30 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import api from "../services/api";
 import { toast } from "react-toastify";
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 function SignUpPage() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    birthday: null,
+    salary: "",
   });
 
+  const handleDateChanged = (date) => {
+    setFormData({
+      ...formData,
+      birthday: dayjs(date).toDate(),
+    });
+  };
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    value = name === "salary" ? parseFloat(value) : value;
+
     setFormData({
       ...formData,
       [name]: value,
@@ -33,9 +46,9 @@ function SignUpPage() {
       const resp = await api.post("/auth/sign-up", formData);
 
       if (resp.status === 200) {
-        toast.done(resp.data, { autoClose: 1500 });
+        toast.info(resp.data, { autoClose: 1500 });
       } else {
-        toast.error("An error occurred : ", resp.data, {
+        toast.error("An error occurred: " + resp.data, {
           autoClose: 1500,
         });
       }
@@ -47,7 +60,9 @@ function SignUpPage() {
           toast.error(error.response.data, { autoClose: 1500 });
         }
       } else {
-        toast.error("An error occurred ", error.message, { autoClose: 1500 });
+        toast.error("An error occurred: " + error.message, {
+          autoClose: 1500,
+        });
       }
     }
   };
@@ -113,6 +128,29 @@ function SignUpPage() {
               id="password"
               autoComplete="new-password"
               onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Birthday"
+                sx={{ width: "100%" }}
+                onChange={handleDateChanged}
+                format="DD/MM/YYYY"
+                required
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              autoComplete="given-name"
+              name="salary"
+              required
+              fullWidth
+              id="salary"
+              label="Current Salary"
+              onChange={handleChange}
+              type="number"
             />
           </Grid>
         </Grid>
