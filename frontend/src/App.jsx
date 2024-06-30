@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import Layout from "./components/Layout";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   useEffect(() => {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/profiles" element={<ProfilePage />} />
+        <Route path="/chat" element={<ChatPage />} />
       </Route>
     </Routes>
   );

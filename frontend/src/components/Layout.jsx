@@ -68,7 +68,12 @@ function Layout() {
               }}
             />
           )}
-
+          <Tab
+            label="Chat"
+            onClick={() => {
+              navigate("/chat");
+            }}
+          />
           <Tab
             label="Settings"
             onClick={() => {

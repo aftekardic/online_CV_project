@@ -34,13 +34,13 @@ function ProfilePage() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ "& th": { fontWeight: "bold" } }}>
-                <TableCell>İsim</TableCell>
-                <TableCell>Soy İsim</TableCell>
+                <TableCell>First Name</TableCell>
+                <TableCell>Last Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Doğum Tarihi</TableCell>
-                <TableCell>Maaş</TableCell>
-                <TableCell>CV Yükleme Tarihi</TableCell>
-                <TableCell>CV Path</TableCell>
+                <TableCell>Birthday</TableCell>
+                <TableCell>Salary</TableCell>
+                <TableCell>Uploaded CV Date</TableCell>
+                <TableCell>Uploaded CV</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

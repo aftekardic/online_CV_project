@@ -42,6 +42,8 @@ public class WebSecurityConfiguration {
                                                 .requestMatchers("/api/v1/cv/**").hasAnyRole("USER_READ", "ADMIN_WRITE")
                                                 .requestMatchers("/api/v1/user/**")
                                                 .hasAnyRole("USER_READ", "ADMIN_WRITE")
+                                                .requestMatchers("/api/v1/chat/**")
+                                                .hasAnyRole("USER_READ", "ADMIN_WRITE")
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .exceptionHandling(exceptionHandling -> exceptionHandling

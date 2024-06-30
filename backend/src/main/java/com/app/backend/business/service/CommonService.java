@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.app.backend.business.dto.DBUserDto;
+import com.app.backend.business.dto.SenderDto;
+import com.app.backend.data.entity.ChatEntity;
 import com.app.backend.data.entity.UserEntity;
 
 @Service
@@ -59,4 +61,15 @@ public class CommonService {
                 .collect(Collectors.toList());
     }
 
+    public ChatEntity senderDtoToEntity(SenderDto senderDto) {
+        if (senderDto == null) {
+            return null;
+        }
+
+        ChatEntity chatEntity = new ChatEntity();
+        chatEntity.setMessage(senderDto.getMessage());
+        chatEntity.setSender(senderDto.getSender());
+
+        return chatEntity;
+    }
 }
